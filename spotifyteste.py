@@ -5,7 +5,7 @@ import pandas as pd
 from itertools import chain
 
 df = pd.read_csv('file.csv')
-df1 = df[:100]
+df1 = df[:40]
 
 # Dados da Autentificacao
 CLIENT_ID = 'f08757aefb25428baa1f8359973a3c24'
@@ -37,16 +37,26 @@ for artist, track in zip(df1['author'], df1['title']):
         id = track_id['tracks']['items'][0]['id']
         af.append(spotify.audio_features(id))
 
+flat_af = []
+for elem in af:
+    if elem:
+        flat_af.append(elem[0])
+    else :
+        flat_af.append('')
+
+print('Flat List : ', flat_af)
 
 #Pegando as features das musicas
 #af = spotify.audio_features(id)
 #print(af)
 
 #Transformando de Data Frame
-features = pd.Series(af)
-features.apply(pd.Series)
+features = pd.Series(flat_af)
+df_features = features.apply(pd.Series)
+df_features.to_csv(r'C:\Users\eduar\Documents\USP\Data Science\dataframe1.csv')
 
 #Concatenando com o DataSet
-df1 = pd.concat([df1, features], axis = 1)
+df1 = pd.concat([df1, df_features], axis = 1)
+#df1.drop(columns = ['Unnamed: 0', '0'])
 df1.to_csv(r'C:\Users\eduar\Documents\USP\Data Science\dataframe2.csv')
 #print(df1.head(50))
