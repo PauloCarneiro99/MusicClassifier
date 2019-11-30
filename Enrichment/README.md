@@ -10,4 +10,6 @@ The data was collected through Spotify's API using as reference the previous dat
 
 As an alternative to speed up requests, the script ```spotify_pseudo_parallel.py``` was used in multiple terminals, taking as arguments the interval of the original dataset that it would collect.
 
-## Data Processing
+
+### Technologies
+[![Python : spotipy](https://img.shields.io/badge/Python-Spotipy-green)](https://spotipy.readthedocs.io/en/latest/)

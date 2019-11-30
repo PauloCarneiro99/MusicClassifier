@@ -19,42 +19,37 @@ if begin > end:
     exit(0)
 
 repository = os.getcwd()
-original_df = pd.read_csv("{}/dataset.csv".format(repository))
+original_df = pd.read_csv("{}/../Dataset/dataset.csv".format(repository))
 original_df = original_df[begin:end].reset_index(drop=True)
 
-# Dados da Autentificacao
-with open(".env", "r") as read_file:
-    credentials = json.load(read_file)
-
-CLIENT_ID = credentials['CLIENT_ID']
-CLIENT_SECRET = credentials['CLIENT_SECRET']
-SPOTIPY_REDIRECT_URI = 'http://localhost:8080'
-SCOPE = 'user-library-read'
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+SPOTIPY_REDIRECT_URI = "http://localhost:8080"
+SCOPE = "user-library-read"
 
 #Acessando através do token
 token = util.oauth2.SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 cache_token = token.get_access_token()
 spotify = spotipy.Spotify(cache_token)
 
-myuri = credentials['myuri']
+myuri = os.getenv("myuri")
 
-user = spotify.user(credentials['user'])
+user = spotify.user(os.getenv("user"))
 
 #Pegando o ID das musicas
 af = []
 cont = 0
-print(cont, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-for artist, track in zip(original_df['author'], original_df['title']):
+print(cont, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+for artist, track in zip(original_df["author"], original_df["title"]):
     cont = cont + 1   
-    track_id = spotify.search(q='artist:' + artist + ' track:' + track, type='track')
-    if(len(track_id['tracks']['items']) < 1):
-        af.append('')
-        # print(artist + ' ' + track + ' ' + str(cont))
+    track_id = spotify.search(q="artist:" + artist + " track:" + track, type="track")
+    if(len(track_id["tracks"]["items"]) < 1):
+        af.append("")
     else:
-        id = track_id['tracks']['items'][0]['id']
+        id = track_id["tracks"]["items"][0]["id"]
         af.append(spotify.audio_features(id))
     if cont % 100 == 0:
-        print(cont, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        print(cont, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 
 flat_af = []
@@ -62,7 +57,7 @@ for elem in af:
     if elem:
         flat_af.append(elem[0])
     else :
-        flat_af.append('')
+        flat_af.append("")
 
 #Transformando de Data Frame
 features = pd.Series(flat_af)
@@ -73,5 +68,5 @@ df_features = features.apply(pd.Series)
 final_df = pd.concat([original_df, df_features], axis = 1)
 final_df = final_df.drop(columns = [0])
 
-final_df.to_csv(r"{}/full_data{}.csv".format(repository, begin), index=False)
+final_df.to_csv(r"{}/../Dataset/full_data{}.csv".format(repository, begin), index=False)
 #print(df1.head(50))

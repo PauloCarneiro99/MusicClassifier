@@ -22,3 +22,4 @@ To see more about the dataset check the folder [music_lyrics_crawlers](https://g
 
 ### Technologies
 [![Python : scrapy](https://img.shields.io/badge/Python-Scrapy-yellow)](https://scrapy.org/)
+[![Python : spotipy](https://img.shields.io/badge/Python-Spotipy-green)](https://spotipy.readthedocs.io/en/latest/)
