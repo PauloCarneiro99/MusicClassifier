@@ -1,1 +1,2 @@
 Scrapy==1.6.0
+Spotipy==v2.4.4
