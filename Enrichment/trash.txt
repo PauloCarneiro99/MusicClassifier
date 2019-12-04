@@ -1,0 +1,45 @@
+# Encoding author, style and title
+to_encode = ["author", "style", "title"]
+new_col_names = ["code_author", "code_style", "code_title"]
+new_col_index = [1, 3, 5]
+encoders = []
+for i in range(len(to_encode)):
+    values = data_set[to_encode[i]]
+    encoder = LabelEncoder()
+    encoders.append(encoder)
+    new_col = encoder.fit_transform(values) 
+    data_set.insert(new_col_index[i], new_col_names[i], new_col)
+    
+# Dropping author, style and title
+drop_columns = ["author", "style", "title"]
+data_set = data_set.drop(drop_columns, axis=1)
+
+
+# One hot encoding
+encoding = pd.get_dummies(data_set["style"], prefix = "category")
+data_set = pd.concat([data_set, encoding], axis=1)
+
+
+# PCA analisys
+data = data_set.drop(["title", "style", "author"], axis=1)
+pca = PCA()
+comp = pca.fit(data)
+importance = comp.explained_variance_/sum(comp.explained_variance_)
+for i in importance:
+    print("{0:.2f}".format(i), end=" ")
+
+
+
+Deixar o título, rodar o pca
+
+
+parameter_space = {
+    "hidden_layer_sizes": [(50,50,50)],
+    "activation": ["logistic"],
+    "solver": ["lbfgs, "sgd, "adam],
+    "alpha": [0.0001, 0.05],
+    "learning_rate": ["adaptive"],
+    "verbose" : [100]
+}
+
+Manter autor
