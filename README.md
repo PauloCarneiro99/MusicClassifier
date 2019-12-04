@@ -21,4 +21,6 @@ To see more about the dataset check the folder [music_lyrics_crawlers](https://g
 ## Results -->
 
 ### Technologies
+---
 [![Python : scrapy](https://img.shields.io/badge/Python-Scrapy-yellow)](https://scrapy.org/)
+[![Python : sklearn](https://img.shields.io/badge/Python-Sklearn-blue)](https://scikit-learn.org/stable/#)
