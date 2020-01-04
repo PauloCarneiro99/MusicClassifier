@@ -1,5 +1,6 @@
 import scrapy
 import logging
+import re
 
 from scrapy.spiders import Spider
 from ..items import LyricsItem
@@ -56,7 +57,9 @@ class LetrasMus(Spider):
         item = LyricsItem()
 
         item["style"] = response.meta["style"]
-        item["title"] = response.xpath("//div[@class='cnt-head_title']/h1/text()").get().strip()
+        item["title"] = self.clean_title(
+            response.xpath("//div[@class='cnt-head_title']/h1/text()").get()
+        )
         item["author"] = response.xpath("//div[@class='cnt-head_title']/h2/a/text()").get().strip()
         item["lyrics"] = response.xpath("//div[@class='cnt-letra p402_premium']/p/text()").extract()
 
@@ -64,3 +67,10 @@ class LetrasMus(Spider):
         item["data"]["url"] = response.url
 
         yield item
+
+    @staticmethod
+    def clean_title(title):
+        title = title.lower()
+        title = re.sub(r"\(.*\)", "", title)
+        title = re.sub(r"ft\. {0,1}.*", "", title)
+        return title.strip()
